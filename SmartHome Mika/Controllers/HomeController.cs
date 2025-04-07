@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SmartHome_Mika.Models;
+using SmartHome_Mika.Services;
 
 namespace SmartHome_Mika.Controllers;
 
@@ -15,8 +16,19 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        Database db = new();
+        SmartLamp lamp = (SmartLamp)db.GetDeviceById(1, "SmartLamp");
+        SmartFridge fridge = (SmartFridge)db.GetDeviceById(1, "SmartFridge");
+
+        HomeViewModel model = new HomeViewModel
+        {
+            Lamp = lamp,
+            Fridge = fridge
+        };
+
+        return View(model);
     }
+
 
     public IActionResult Privacy()
     {

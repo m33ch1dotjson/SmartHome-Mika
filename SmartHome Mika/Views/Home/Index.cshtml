@@ -6,7 +6,36 @@
 <div class="text-center">
     <h1 class="display-4">Welkom Thuis</h1>
     <p>Bekijk hier je apparaten: </p>
-    <input style="margin-top: 10px;" type="text" placeholder="Search..">
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <input type="text" name="zoekterm" placeholder="Zoek apparaat..." />
+        <button type="submit">Zoek</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.Zoekterm))
+    {
+        <hr />
+        <h4>Zoekresultaten voor: "@Model.Zoekterm"</h4>
+
+        @if (Model.ZoekResultaten != null && Model.ZoekResultaten.Any())
+        {
+            <div class="row justify-content-center">
+                @foreach (var device in Model.ZoekResultaten)
+                {
+                    <div class="card m-2" style="width: 18rem;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@device.Name</h5>
+                            <p>Status: @(device.IsOn ? "Aan" : "Uit")</p>
+                            <p>Ruimte: @device.Room</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-danger">Geen apparaten gevonden.</p>
+        }
+    }
 </div>
 <div>
     <h2 class="display-6">Mika's kamer</h2>
@@ -23,7 +52,7 @@
     </form>
 </div>
 <div>
-    <p>Koelkast - Status: <strong>@(Model.Fridge.IsOn ? "Aan" : "Uit")</strong> </p>
+    <p style="margin-top: 20px;">Koelkast - Status: <strong>@(Model.Fridge.IsOn ? "Aan" : "Uit")</strong> </p>
     <img src="https://cdn.webshopapp.com/shops/65625/files/434814765/combisteel-mini-koelkast-glazen-deur-80l-h84xb474d.jpg;w_1600;h_1600;q_100/9643035.jpg" width="300" />
 </div>
 <div>

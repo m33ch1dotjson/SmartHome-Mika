@@ -11,6 +11,14 @@ namespace SmartHome_Mika.Controllers
             return View();
         }
 
+        public IActionResult Zoeken(string zoekterm)
+        {
+            Database db = new();
+            List<SmartDevice> resultaten = db.SearchDevicesByName(zoekterm);
+
+            return View(resultaten); 
+        }
+
         [HttpPost]
         public IActionResult ChangeIsOn(int Id, string DeviceType)
         {

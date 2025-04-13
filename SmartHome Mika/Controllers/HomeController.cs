@@ -14,16 +14,24 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(string zoekterm)
     {
         Database db = new();
         SmartLamp lamp = (SmartLamp)db.GetDeviceById(1, "SmartLamp");
         SmartFridge fridge = (SmartFridge)db.GetDeviceById(1, "SmartFridge");
 
+        List<SmartDevice> zoekResultaten = new();
+        if (!string.IsNullOrEmpty(zoekterm))
+        {
+            zoekResultaten = db.SearchDevicesByName(zoekterm);
+        }
+
         HomeViewModel model = new HomeViewModel
         {
             Lamp = lamp,
-            Fridge = fridge
+            Fridge = fridge,
+            Zoekterm = zoekterm,
+            ZoekResultaten = zoekResultaten
         };
 
         return View(model);

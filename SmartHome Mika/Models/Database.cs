@@ -64,6 +64,34 @@ namespace SmartHome_Mika.Models
             return null;
         }
 
+        public List<SmartDevice> SearchDevicesByName(string zoekterm)
+        {
+            List<SmartDevice> results = new();
+
+            using SqlConnection conn = new(connectionString);
+            conn.Open();
+
+            string queryLamp = "SELECT * FROM SmartLamp WHERE Name LIKE @term";
+            using SqlCommand cmd = new(queryLamp, conn);
+            cmd.Parameters.AddWithValue("@term", "%" + zoekterm + "%");
+
+            using SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                results.Add(new SmartLamp(
+                    reader.GetInt32(0),
+                    (Room)reader.GetInt32(3),
+                    reader.GetString(1)
+                )
+                {
+                    IsOn = reader.GetBoolean(2)
+                });
+            }
+
+            return results;
+        }
+
+
 
     }
 }

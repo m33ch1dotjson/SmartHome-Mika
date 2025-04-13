@@ -91,6 +91,31 @@ namespace SmartHome_Mika.Models
             return results;
         }
 
+        public void AddDevice(SmartDevice device, string deviceType)
+        {
+            using SqlConnection conn = new(connectionString);
+            conn.Open();
+
+            string query = "";
+            SqlCommand cmd = new();
+
+            if (deviceType == "SmartLamp")
+            {
+                query = "INSERT INTO SmartLamp (Name, IsOn, Room) VALUES (@name, 0, @room)";
+                cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", device.Name);
+                cmd.Parameters.AddWithValue("@room", (int)device.Room);
+            }
+            else if (deviceType == "SmartFridge")
+            {
+                query = "INSERT INTO SmartFridge (Name, IsOn, Room, Temperature, FreezeMode) VALUES (@name, 0, @room, 5, 0)";
+                cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", device.Name);
+                cmd.Parameters.AddWithValue("@room", (int)device.Room);
+            }
+
+            cmd.ExecuteNonQuery();
+        }
 
 
     }

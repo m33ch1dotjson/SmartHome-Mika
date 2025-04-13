@@ -30,5 +30,21 @@ namespace SmartHome_Mika.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult AddDevice()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddDevice(SmartDevice device, string deviceType)
+        {
+            Database db = new();
+            db.AddDevice(device, deviceType);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
     }
 }
